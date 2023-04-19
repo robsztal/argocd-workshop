@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app
+  namespace: argocd
+spec:
+  destination:
+    namespace: guestbook
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: ./app
+    helm:
+      values: ""
+    repoURL: https://github.com/robsztal/argocd-workshop.git
+    targetRevision: *
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
