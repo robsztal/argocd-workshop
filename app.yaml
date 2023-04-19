@@ -13,7 +13,7 @@ spec:
     helm:
       values: ""
     repoURL: https://github.com/robsztal/argocd-workshop.git
-    targetRevision: *
+    targetRevision: "*"
   syncPolicy:
     automated: {}
     syncOptions:
