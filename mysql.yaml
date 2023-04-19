@@ -1,0 +1,255 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  generation: 19
+  managedFields:
+    - apiVersion: argoproj.io/v1alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:health:
+            f:status: {}
+          f:history: {}
+          f:operationState:
+            .: {}
+            f:finishedAt: {}
+            f:message: {}
+            f:operation:
+              .: {}
+              f:initiatedBy:
+                .: {}
+                f:username: {}
+              f:retry: {}
+              f:sync:
+                .: {}
+                f:revision: {}
+                f:syncOptions: {}
+                f:syncStrategy:
+                  .: {}
+                  f:hook: {}
+            f:phase: {}
+            f:startedAt: {}
+            f:syncResult:
+              .: {}
+              f:resources: {}
+              f:revision: {}
+              f:source:
+                .: {}
+                f:chart: {}
+                f:repoURL: {}
+                f:targetRevision: {}
+          f:reconciledAt: {}
+          f:resources: {}
+          f:sourceType: {}
+          f:summary:
+            f:images: {}
+          f:sync:
+            f:comparedTo:
+              f:destination:
+                f:namespace: {}
+                f:server: {}
+              f:source:
+                f:chart: {}
+                f:repoURL: {}
+                f:targetRevision: {}
+            f:revision: {}
+            f:status: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: '2023-04-19T09:47:34Z'
+    - apiVersion: argoproj.io/v1alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          .: {}
+          f:destination:
+            .: {}
+            f:namespace: {}
+            f:server: {}
+          f:project: {}
+          f:source:
+            .: {}
+            f:chart: {}
+            f:repoURL: {}
+            f:targetRevision: {}
+          f:syncPolicy:
+            .: {}
+            f:automated:
+              .: {}
+              f:selfHeal: {}
+            f:syncOptions: {}
+        f:status:
+          .: {}
+          f:health: {}
+          f:summary: {}
+          f:sync:
+            .: {}
+            f:comparedTo:
+              .: {}
+              f:destination: {}
+              f:source: {}
+      manager: argocd-server
+      operation: Update
+      time: '2023-04-19T09:47:45Z'
+  name: mysql
+  namespace: argocd
+  resourceVersion: '31761'
+  uid: 4e34fa67-eeba-4fe9-9495-9d6967d28896
+spec:
+  destination:
+    namespace: guestbook
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: mysql
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 9.7.1
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+status:
+  health:
+    status: Healthy
+  history:
+    - deployStartedAt: '2023-04-19T09:47:33Z'
+      deployedAt: '2023-04-19T09:47:34Z'
+      id: 0
+      revision: 9.7.1
+      source:
+        chart: mysql
+        repoURL: https://charts.bitnami.com/bitnami
+        targetRevision: 9.7.1
+  operationState:
+    finishedAt: '2023-04-19T09:47:34Z'
+    message: successfully synced (all tasks run)
+    operation:
+      initiatedBy:
+        username: admin
+      retry: {}
+      sync:
+        revision: 9.7.1
+        syncOptions:
+          - CreateNamespace=true
+        syncStrategy:
+          hook: {}
+    phase: Succeeded
+    startedAt: '2023-04-19T09:47:33Z'
+    syncResult:
+      resources:
+        - group: ''
+          hookPhase: Running
+          kind: ServiceAccount
+          message: serviceaccount/mysql created
+          name: mysql
+          namespace: guestbook
+          status: Synced
+          syncPhase: Sync
+          version: v1
+        - group: ''
+          hookPhase: Running
+          kind: Secret
+          message: secret/mysql created
+          name: mysql
+          namespace: guestbook
+          status: Synced
+          syncPhase: Sync
+          version: v1
+        - group: ''
+          hookPhase: Running
+          kind: ConfigMap
+          message: configmap/mysql created
+          name: mysql
+          namespace: guestbook
+          status: Synced
+          syncPhase: Sync
+          version: v1
+        - group: ''
+          hookPhase: Running
+          kind: Service
+          message: service/mysql-headless created
+          name: mysql-headless
+          namespace: guestbook
+          status: Synced
+          syncPhase: Sync
+          version: v1
+        - group: ''
+          hookPhase: Running
+          kind: Service
+          message: service/mysql created
+          name: mysql
+          namespace: guestbook
+          status: Synced
+          syncPhase: Sync
+          version: v1
+        - group: apps
+          hookPhase: Running
+          kind: StatefulSet
+          message: statefulset.apps/mysql created
+          name: mysql
+          namespace: guestbook
+          status: Synced
+          syncPhase: Sync
+          version: v1
+      revision: 9.7.1
+      source:
+        chart: mysql
+        repoURL: https://charts.bitnami.com/bitnami
+        targetRevision: 9.7.1
+  reconciledAt: '2023-04-19T09:58:55Z'
+  resources:
+    - kind: ConfigMap
+      name: mysql
+      namespace: guestbook
+      status: Synced
+      version: v1
+    - kind: Secret
+      name: mysql
+      namespace: guestbook
+      status: Synced
+      version: v1
+    - health:
+        status: Healthy
+      kind: Service
+      name: mysql
+      namespace: guestbook
+      status: Synced
+      version: v1
+    - health:
+        status: Healthy
+      kind: Service
+      name: mysql-headless
+      namespace: guestbook
+      status: Synced
+      version: v1
+    - kind: ServiceAccount
+      name: mysql
+      namespace: guestbook
+      status: Synced
+      version: v1
+    - group: apps
+      health:
+        message: >-
+          statefulset rolling update complete 1 pods at revision
+          mysql-74bc79cc44...
+        status: Healthy
+      kind: StatefulSet
+      name: mysql
+      namespace: guestbook
+      status: Synced
+      version: v1
+  sourceType: Helm
+  summary:
+    images:
+      - docker.io/bitnami/mysql:8.0.32-debian-11-r21
+  sync:
+    comparedTo:
+      destination:
+        namespace: guestbook
+        server: https://kubernetes.default.svc
+      source:
+        chart: mysql
+        repoURL: https://charts.bitnami.com/bitnami
+        targetRevision: 9.7.1
+    revision: 9.7.1
