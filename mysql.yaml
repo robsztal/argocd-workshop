@@ -11,9 +11,9 @@ spec:
   source:
     chart: mysql
     helm:
-        repoURL: https://charts.bitnami.com/bitnami
-        targetRevision: 9.7.*
-    revision: 9.7.1
+      values: ""
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 9.7.*
   syncPolicy:
     automated:
       prune: true
