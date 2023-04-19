@@ -1,5 +1,6 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
+metadata:
   name: mysql
   namespace: argocd
 spec:
@@ -9,154 +10,13 @@ spec:
   project: default
   source:
     chart: mysql
-    repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 9.7.1
+    helm:
+        repoURL: https://charts.bitnami.com/bitnami
+        targetRevision: 9.7.*
+    revision: 9.7.1
   syncPolicy:
     automated:
+      prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-status:
-  health:
-    status: Healthy
-  history:
-    - deployStartedAt: '2023-04-19T09:47:33Z'
-      deployedAt: '2023-04-19T09:47:34Z'
-      id: 0
-      revision: 9.7.1
-      source:
-        chart: mysql
-        repoURL: https://charts.bitnami.com/bitnami
-        targetRevision: 9.7.1
-  operationState:
-    finishedAt: '2023-04-19T09:47:34Z'
-    message: successfully synced (all tasks run)
-    operation:
-      initiatedBy:
-        username: admin
-      retry: {}
-      sync:
-        revision: 9.7.1
-        syncOptions:
-          - CreateNamespace=true
-        syncStrategy:
-          hook: {}
-    phase: Succeeded
-    startedAt: '2023-04-19T09:47:33Z'
-    syncResult:
-      resources:
-        - group: ''
-          hookPhase: Running
-          kind: ServiceAccount
-          message: serviceaccount/mysql created
-          name: mysql
-          namespace: guestbook
-          status: Synced
-          syncPhase: Sync
-          version: v1
-        - group: ''
-          hookPhase: Running
-          kind: Secret
-          message: secret/mysql created
-          name: mysql
-          namespace: guestbook
-          status: Synced
-          syncPhase: Sync
-          version: v1
-        - group: ''
-          hookPhase: Running
-          kind: ConfigMap
-          message: configmap/mysql created
-          name: mysql
-          namespace: guestbook
-          status: Synced
-          syncPhase: Sync
-          version: v1
-        - group: ''
-          hookPhase: Running
-          kind: Service
-          message: service/mysql-headless created
-          name: mysql-headless
-          namespace: guestbook
-          status: Synced
-          syncPhase: Sync
-          version: v1
-        - group: ''
-          hookPhase: Running
-          kind: Service
-          message: service/mysql created
-          name: mysql
-          namespace: guestbook
-          status: Synced
-          syncPhase: Sync
-          version: v1
-        - group: apps
-          hookPhase: Running
-          kind: StatefulSet
-          message: statefulset.apps/mysql created
-          name: mysql
-          namespace: guestbook
-          status: Synced
-          syncPhase: Sync
-          version: v1
-      revision: 9.7.1
-      source:
-        chart: mysql
-        repoURL: https://charts.bitnami.com/bitnami
-        targetRevision: 9.7.1
-  reconciledAt: '2023-04-19T09:58:55Z'
-  resources:
-    - kind: ConfigMap
-      name: mysql
-      namespace: guestbook
-      status: Synced
-      version: v1
-    - kind: Secret
-      name: mysql
-      namespace: guestbook
-      status: Synced
-      version: v1
-    - health:
-        status: Healthy
-      kind: Service
-      name: mysql
-      namespace: guestbook
-      status: Synced
-      version: v1
-    - health:
-        status: Healthy
-      kind: Service
-      name: mysql-headless
-      namespace: guestbook
-      status: Synced
-      version: v1
-    - kind: ServiceAccount
-      name: mysql
-      namespace: guestbook
-      status: Synced
-      version: v1
-    - group: apps
-      health:
-        message: >-
-          statefulset rolling update complete 1 pods at revision
-          mysql-74bc79cc44...
-        status: Healthy
-      kind: StatefulSet
-      name: mysql
-      namespace: guestbook
-      status: Synced
-      version: v1
-  sourceType: Helm
-  summary:
-    images:
-      - docker.io/bitnami/mysql:8.0.32-debian-11-r21
-  sync:
-    comparedTo:
-      destination:
-        namespace: guestbook
-        server: https://kubernetes.default.svc
-      source:
-        chart: mysql
-        repoURL: https://charts.bitnami.com/bitnami
-        targetRevision: 9.7.1
-    revision: 9.7.1
