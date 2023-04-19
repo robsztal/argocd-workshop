@@ -1,20 +1,129 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+# Source: guestbook/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
 metadata:
-  name: app
-  namespace: argocd
+  name: guestbook
+  labels:
+    helm.sh/chart: guestbook-0.4.0
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook
+    app.kubernetes.io/version: "0.4"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: guestbook/templates/secret.yml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: guestbook
+  labels:
+    helm.sh/chart: guestbook-0.4.0
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook
+    app.kubernetes.io/version: "0.4"
+    app.kubernetes.io/managed-by: Helm
+data:
+  DB: Z3Vlc3Rib29r
+  DB_USER: cm9vdA==
+  DB_PASSWORD: cm9vdA==
+  DB_HOST: bXlzcWw=
+---
+# Source: guestbook/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: guestbook
+  labels:
+    helm.sh/chart: guestbook-0.4.0
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook
+    app.kubernetes.io/version: "0.4"
+    app.kubernetes.io/managed-by: Helm
 spec:
-  destination:
-    namespace: guestbook
-    server: https://kubernetes.default.svc
-  project: default
-  source:
-    chart: ./app
-    helm:
-      values: ""
-    repoURL: https://github.com/robsztal/argocd-workshop.git
-    targetRevision: "*"
-  syncPolicy:
-    automated: {}
-    syncOptions:
-      - CreateNamespace=true
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook
+---
+# Source: guestbook/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guestbook
+  labels:
+    helm.sh/chart: guestbook-0.4.0
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook
+    app.kubernetes.io/version: "0.4"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: guestbook
+      app.kubernetes.io/instance: guestbook
+  template:
+    metadata:
+      annotations:
+        checksum/secret.yml: 71deba088bacbddabdb13dad003b73248d94bbe9d571177beb59a8416a803c6d
+      labels:
+        app.kubernetes.io/name: guestbook
+        app.kubernetes.io/instance: guestbook
+
+    spec:
+      serviceAccountName: guestbook
+      securityContext:
+        {}
+      containers:
+        - name: guestbook
+          securityContext:
+            {}
+          image: "mrdunski/guestbook:0.4"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/health/liveness
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/health/readiness
+              port: http
+          envFrom:
+            - secretRef:
+                name: guestbook
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+# Source: guestbook/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "guestbook-test-connection"
+  labels:
+    helm.sh/chart: guestbook-0.4.0
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook
+    app.kubernetes.io/version: "0.4"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['guestbook:80']
+  restartPolicy: Never
