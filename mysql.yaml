@@ -15,5 +15,3 @@ spec:
     repoURL: https://charts.bitnami.com/bitnami
     targetRevision: 9.7.*
   syncPolicy: {}
-    syncOptions:
-      - CreateNamespace=true
